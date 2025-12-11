@@ -43,6 +43,12 @@ pub fn flatlude(_input: TokenStream) -> TokenStream {
                     }
                 }
             }
+        } else if PathBuf::from(&path).join("mod.rs").exists() {
+            let mod_name = path.file_stem().unwrap().to_string_lossy();
+            let mod_name = syn::Ident::new(&mod_name, proc_macro2::Span::call_site());
+            module_declarations.push(quote! {
+                pub mod #mod_name;
+            })
         }
     }
 
